@@ -1,21 +1,19 @@
-document.addEventListener('DOMContentLoaded', () => {
+function Search() {
+    let inputText = document.getElementById('myInput');
+    let tab = document.getElementById('myTable');
+    let regPhrase = new RegExp(inputText.value, 'i');
+    let check = false;
+    for (let i = 1; i < tab.rows.length; i++) {
+        check = false;
+        for (let j = tab.rows[i].cells.length - 1; j >= 0; j--) {
+            check = regPhrase.test(tab.rows[i].cells[j].innerHTML);
+            if (check) break;
+        }
+        if (check) {
+            tab.rows[i].style.display = "";
+        } else {
+            tab.rows[i].style.display = "none";
+        }
 
-    const getSort = ({ target }) => {
-        const order = (target.dataset.order = -(target.dataset.order || -1));
-        const index = [...target.parentNode.cells].indexOf(target);
-        const collator = new Intl.Collator(['en', 'ru'], { numeric: true });
-        const comparator = (index, order) => (a, b) => order * collator.compare(
-            a.children[index].innerHTML,
-            b.children[index].innerHTML
-        );
-        
-        for(const tBody of target.closest('table').tBodies)
-            tBody.append(...[...tBody.rows].sort(comparator(index, order)));
-
-        for(const cell of target.parentNode.cells)
-            cell.classList.toggle('sorted', cell === target);
-    };
-    
-    document.querySelectorAll('.sort').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
-    
-});
+    }
+}
